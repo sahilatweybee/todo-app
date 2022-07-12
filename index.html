@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://kit.fontawesome.com/f490d52a52.js" crossorigin="anonymous"></script>
+
+    <title>TODO-App</title>
+</head>
+
+<body>
+    <main class="container-main">
+        <h1>TODO LIST</h1>
+        <input class="input-text" type="text">
+
+        <div class="task-List">
+            <div class="task" id="a">
+                <div class="select">
+                    <input type="checkbox" class="check-box" id="check-a">
+                    <label class="text" for="check-box" id="text-a">a</label>
+                </div>
+
+                <div class="edit-input">
+                    <i class="fa fa-edit edit-btn" id="edit-a"></i>
+                    <i class="fa-solid fa-delete-left delete-btn" id="delete-a"></i>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="first">
+                <button class="btn btn-add" type="button">
+                    <i class="fa fa-plus add-btn" aria-hidden="true"></i>
+                </button>
+                <button class="btn btn--search" type="button">
+                    <i class="fa fa-search search-btn" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="second">
+                <div class="act">
+                    <select name="Action" class="main-action">
+                        <option class="action">Action</option>
+                        <option class="delete-selected">Delete Selected</option>
+                        <option class="select-all">Select all</option>
+                        <option class="unselect-all">Unselect all</option>
+                    </select>
+                </div>
+
+                <div class="sort">
+                    <select name="Soting" class="sorting">
+                        <option class="a-to-z">A to Z</option>
+                        <option class="z-to-a">Z to A</option>
+                        <option class="oldest">Oldest</option>
+                        <option class="newest">Newest</option>
+                    </select>
+                </div>
+
+                <ul class="tab">
+                    <li class="all">All</li>
+                    <li class="active">Active</li>
+                    <li class="completed">Completed</li>
+                </ul>
+            </div>
+
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
