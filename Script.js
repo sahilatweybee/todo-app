@@ -16,11 +16,13 @@ const btnAdd = document.querySelector('.btn-add');
 const btnSearch = document.querySelector('.btn-search');
 
 //-------------------------------------------------------------- Action ----------------//
+const action = document.querySelector('.main-action')
 const btnSelectAll = document.querySelector('.select-all');
 const btnUnselectAll = document.querySelector('.unselect-all');
 const btnDeleteAll = document.querySelector('.delete-selected');
 
 //-------------------------------------------------------------- Sorting ---------------//
+const sort = document.querySelector('.sorting');
 const btnAtoZ = document.querySelector('.a-to-z');
 const btnZtoA = document.querySelector('.z-to-a');
 const btnOldest = document.querySelector('.oldest');
@@ -31,7 +33,7 @@ const btnAll = document.querySelector('.all');
 const btnActive = document.querySelector('.active');
 const btnCompleted = document.querySelector('.completed');
 
-//--------------------------------------------------GolobalVariables--------------------//
+//-------------------------------------------------Golobal Variables--------------------//
 let tasks = [];
 let activeTasks = [];
 let completedTasks = [];
