@@ -17,15 +17,15 @@
         <input class="input-text hidden" type="text">
 
         <div class="task-List hidden">
-            <div class="task" id="a">
-                <div class="select">
-                    <input type="checkbox" class="check-box" id="check-a">
-                    <label class="text" for="check-box" id="text-a">a</label>
+            <div class="task" id="task-0">
+                <div class="taskName">
+                    <input type="checkbox" class="check-box" id="0" onclick='checkTask(0)'>a
+                    <div class="text"><input type="textbox" value="a" class="hidden edit-textbox" /></div>
                 </div>
 
                 <div class="edit-input">
-                    <i class="fa fa-edit edit-btn" id="edit-a"></i>
-                    <i class="fa-solid fa-delete-left delete-btn" id="delete-a"></i>
+                    <i class="fa fa-edit edit-btn" id="0" onclick='editTask(0)'></i>
+                    <i class="fa-solid fa-delete-left delete-btn" id="0" onclick='deleteTask(0)'></i>
                 </div>
             </div>
         </div>

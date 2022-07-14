@@ -31,12 +31,16 @@ input {
   border-bottom: 1px solid rgb(207, 195, 195);
 }
 
-.task .select {
+.task .taskName {
   display: flex;
   justify-content: space-between;
 }
 
-.task .edit-input {
+.task .taskName .check-box{
+  width: auto;
+}
+
+.task .edit-btns {
   width: 20%;
   text-align: left;
   display: flex;
@@ -87,11 +91,11 @@ input {
 ul {
   list-style-type: none;
   margin: 0;
-  padding: 1.5px;
+  padding: 0;
   overflow: hidden;
   display: flex;
-  /* border: .1px solid white;*/
-  border-radius: .3em; 
+  border: 0px white;
+  border-radius: .3em;
 }
 
 li {
@@ -109,7 +113,7 @@ li {
   display: none;
 }
 
-.active-li{
+.active-li {
   background-color: white;
   padding: .3em 1em;
   box-shadow: 0 0 3px 1.3px blue;
