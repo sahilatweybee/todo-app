@@ -14,9 +14,9 @@
 <body>
     <main class="container-main">
         <h1>TODO LIST</h1>
-        <input class="input-text" type="text">
+        <input class="input-text hidden" type="text">
 
-        <div class="task-List">
+        <div class="task-List hidden">
             <div class="task" id="a">
                 <div class="select">
                     <input type="checkbox" class="check-box" id="check-a">
@@ -29,13 +29,13 @@
                 </div>
             </div>
         </div>
-        <div class="footer">
+        <div class="other-btns">
             <div class="first">
                 <button class="btn btn-add" type="button">
-                    <i class="fa fa-plus add-btn" aria-hidden="true"></i>
+                    <i class="fa fa-plus add-btn"></i>
                 </button>
-                <button class="btn btn--search" type="button">
-                    <i class="fa fa-search search-btn" aria-hidden="true"></i>
+                <button class="btn btn-search" type="button">
+                    <i class="fa fa-search search-btn"></i>
                 </button>
             </div>
 
@@ -59,12 +59,11 @@
                 </div>
 
                 <ul class="tab">
-                    <li class="all">All</li>
+                    <li class="all active-li">All</li>
                     <li class="active">Active</li>
                     <li class="completed">Completed</li>
                 </ul>
             </div>
-
         </div>
     </main>
     <script src="script.js"></script>
