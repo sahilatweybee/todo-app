@@ -16,7 +16,7 @@ const btnAdd = document.querySelector('.btn-add');
 const btnSearch = document.querySelector('.btn-search');
 
 //-------------------------------------------------------------- Action ----------------//
-const action = document.querySelector('.main-action')
+const actions = document.querySelector('.main-action')
 const btnSelectAll = document.querySelector('.select-all');
 const btnUnselectAll = document.querySelector('.unselect-all');
 const btnDeleteAll = document.querySelector('.delete-selected');
@@ -37,6 +37,7 @@ const btnCompleted = document.querySelector('.completed');
 let tasks = [];
 let activeTasks = [];
 let completedTasks = [];
+let sortedTaasks = [];
 let editFlag = false;
 let currentId;
 let task = {
@@ -76,7 +77,7 @@ const displayTask = function (tasks) {
 
     tasks.forEach(function (t) {
         const html = `
-        <div class="task" id="task-${t.id}">
+        <div class="task">
             <div class="taskName">
                 <input type="checkbox" class="check-box" id="${t.id}"${t.checked ? 'checked' : ""} onclick=checkTask(${t.id})>
                 <div class="text">${editFlag && currentId == t.id ? `<input type="textbox" class = 'edit-textbox' value="${t.text}" onkeypress = editOnEnter(event)>` : t.text}</div>
@@ -107,7 +108,7 @@ const search = function () {
 const checkTask = function (i) {
     let index = tasks.findIndex(el => el.id == i);
     tasks[index].checked = !tasks[index].checked;
-    console.log(index);
+    // console.log(index);
 };
 
 //---------------------------------------------------------EditTask---------------------//
@@ -185,3 +186,113 @@ btnCompleted.addEventListener('click', function () {
     showCompletedTasks();
 });
 
+//------------------------------------------------------Sort-menu-----------------------//
+sort.addEventListener('click', function () {
+    let type = sort.options[sort.selectedIndex].value;
+    // console.log(type);
+    switch (type) {
+        case "A-Z":
+            sort.selectedIndex = 0;
+            sortedTaasks = tasks.slice().sort((a, b) => {
+                if (a.text > b.text) {
+                    return -1;
+                } else if (a.text < b.text) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+            displayTask(sortedTaasks);
+            break;
+
+        case "Z-A":
+            sort.selectedIndex = 0;
+            sortedTaasks = tasks.slice().sort((a, b) => {
+                if (a.text < b.text) {
+                    return -1;
+                } else if (a.text > b.text) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+            displayTask(sortedTaasks);
+            break;
+
+        case "Newest":
+            sort.selectedIndex = 0;
+            sortedTaasks = tasks.slice().sort((a, b) => {
+                if (a.id < b.id) {
+                    return -1;
+                } else if (a.id > b.id) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+            displayTask(sortedTaasks);
+            break;
+
+        case "Oldest":
+            sort.selectedIndex = 0;
+            sortedTaasks = tasks.slice().sort((a, b) => {
+                if (a.id > b.id) {
+                    return -1;
+                } else if (a.id < b.id) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            });
+            displayTask(sortedTaasks);
+            break;
+
+        default : 
+            sort.selectedIndex = 0;
+            displayTask(tasks);
+            break;
+    }
+});
+
+//-----------------------------------------------------Actions-menu---------------------//
+actions.addEventListener('click', function () {
+    let action = actions.options[actions.selectedIndex].value;
+    // console.log(action);
+
+    switch (action){
+        case "Delete Selected":
+            actions.selectedIndex = 0;
+            tasks.forEach(tsk => {
+                if(tsk.checked == true){
+                    tasks.splice(tasks.indexOf(tsk), 1);
+                }
+            });
+            displayTask(tasks);
+            break;
+
+        case "Select All":
+            actions.selectedIndex = 0;
+            tasks.forEach((tsk) =>{
+                if(!tsk.checked){
+                    tsk.checked = !tsk.checked;
+                }
+            });
+            displayTask(tasks);
+            break;
+
+        case "Unselect All":
+            actions.selectedIndex = 0;
+            tasks.forEach((tsk) => {
+                if (tsk.checked) {
+                    tsk.checked = !tsk.checked;
+                }
+            });
+            displayTask(tasks);
+            break;
+
+        default:
+            sort.selectedIndex = 0;
+            displayTask(tasks);
+            break;
+    }
+});
