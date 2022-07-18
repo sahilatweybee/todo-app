@@ -131,7 +131,7 @@ const editOnEnter = function (e) {
 //---------------------------------------------------------deleteTask-------------------//
 const deleteTask = function (i) {
     const index = tasks.findIndex(el => el.id === i);
-    tasks.splice(i);
+    tasks.splice(i, 1);
     displayTask(tasks);
 };
 
