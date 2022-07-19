@@ -37,7 +37,7 @@ const btnCompleted = document.querySelector('.completed');
 let tasks = [];
 let activeTasks = [];
 let completedTasks = [];
-let sortedTaasks = [];
+let sortedTasks = [];
 let editFlag = false;
 let currentId;
 let task = {
@@ -45,6 +45,7 @@ let task = {
     text: '',
     checked: false,
 };
+let sorted = false;
 
 //-----------------------------------------------------------Add------------------------//
 const addEntry = function () {
@@ -115,7 +116,11 @@ const checkTask = function (i) {
 const editTask = function (i) {
     editFlag = true;
     currentId = i;
-    displayTask(tasks);
+    if(sorted){
+        displayTask(sortedTasks);
+    }else{
+        displayTask(tasks);
+    }
 };
 
 const editOnEnter = function (e) {
@@ -124,27 +129,49 @@ const editOnEnter = function (e) {
         tasks[index].text = document.querySelector('.edit-textbox').value;
         editFlag = false;
         currentId = 0;
-        displayTask(tasks);
+        if(sorted){
+            displayTask(sortedTasks);
+        }else{
+            displayTask(tasks);
+        }
     }
 };
 
 //---------------------------------------------------------deleteTask-------------------//
 const deleteTask = function (i) {
-    const index = tasks.findIndex(el => el.id === i);
-    tasks.splice(i, 1);
-    displayTask(tasks);
+    
+    if (sorted){
+        const index = sortedTasks.findIndex(el => el.id === i);
+        sortedTasks.splice(index, 1);
+        displayTask(sortedTasks);
+    }else{
+        const index = tasks.findIndex(el => el.id === i);
+        tasks.splice(index, 1);
+        displayTask(tasks);
+    }
+    
 };
 
 //------------------------------------------------------showActiveTasks-----------------//
 const showActiveTasks = function () {
-    activeTasks = tasks.filter(task => task.checked == false);
-    displayTask(activeTasks);
+    if(sorted){
+        activeTasks = sortedTasks.filter(task => task.checked == false);
+        displayTask(activeTasks);
+    }else{
+        activeTasks = tasks.filter(task => task.checked == false);
+        displayTask(activeTasks);
+    }
 };
 
 //---------------------------------------------------showCompletedTasks-----------------//
 const showCompletedTasks = function () {
-    completedTasks = tasks.filter(task => task.checked == true);
-    displayTask(completedTasks);
+    if(sorted){
+        completedTasks = sortedTasks.filter(task => task.checked == true);
+        displayTask(completedTasks);
+    } else{
+        completedTasks = tasks.filter(task => task.checked == true);
+        displayTask(completedTasks);
+    }
 };
 
 //-----------------------------------------------------eventListeners-------------------//
@@ -192,8 +219,8 @@ sort.addEventListener('click', function () {
     // console.log(type);
     switch (type) {
         case "A-Z":
-            sort.selectedIndex = 0;
-            sortedTaasks = tasks.slice().sort((a, b) => {
+            sorted = true;
+            sortedTasks = tasks.slice().sort((a, b) => {
                 if (a.text > b.text) {
                     return -1;
                 } else if (a.text < b.text) {
@@ -202,12 +229,12 @@ sort.addEventListener('click', function () {
                     return 0;
                 }
             });
-            displayTask(sortedTaasks);
+            displayTask(sortedTasks);
             break;
 
         case "Z-A":
-            sort.selectedIndex = 0;
-            sortedTaasks = tasks.slice().sort((a, b) => {
+            sorted = true;
+            sortedTasks = tasks.slice().sort((a, b) => {
                 if (a.text < b.text) {
                     return -1;
                 } else if (a.text > b.text) {
@@ -216,12 +243,12 @@ sort.addEventListener('click', function () {
                     return 0;
                 }
             });
-            displayTask(sortedTaasks);
+            displayTask(sortedTasks);
             break;
 
         case "Newest":
-            sort.selectedIndex = 0;
-            sortedTaasks = tasks.slice().sort((a, b) => {
+            sorted = true;
+            sortedTasks = tasks.slice().sort((a, b) => {
                 if (a.id < b.id) {
                     return -1;
                 } else if (a.id > b.id) {
@@ -230,12 +257,12 @@ sort.addEventListener('click', function () {
                     return 0;
                 }
             });
-            displayTask(sortedTaasks);
+            displayTask(sortedTasks);
             break;
 
         case "Oldest":
-            sort.selectedIndex = 0;
-            sortedTaasks = tasks.slice().sort((a, b) => {
+            sorted = true;
+            sortedTasks = tasks.slice().sort((a, b) => {
                 if (a.id > b.id) {
                     return -1;
                 } else if (a.id < b.id) {
@@ -244,11 +271,11 @@ sort.addEventListener('click', function () {
                     return 0;
                 }
             });
-            displayTask(sortedTaasks);
+            displayTask(sortedTasks);
             break;
 
         default : 
-            sort.selectedIndex = 0;
+            sorted = false;
             displayTask(tasks);
             break;
     }
@@ -261,7 +288,6 @@ actions.addEventListener('click', function () {
 
     switch (action){
         case "Delete Selected":
-            actions.selectedIndex = 0;
             tasks.forEach(tsk => {
                 if(tsk.checked == true){
                     tasks.splice(tasks.indexOf(tsk), 1);
@@ -271,7 +297,6 @@ actions.addEventListener('click', function () {
             break;
 
         case "Select All":
-            actions.selectedIndex = 0;
             tasks.forEach((tsk) =>{
                 if(!tsk.checked){
                     tsk.checked = !tsk.checked;
@@ -281,7 +306,6 @@ actions.addEventListener('click', function () {
             break;
 
         case "Unselect All":
-            actions.selectedIndex = 0;
             tasks.forEach((tsk) => {
                 if (tsk.checked) {
                     tsk.checked = !tsk.checked;
@@ -291,7 +315,6 @@ actions.addEventListener('click', function () {
             break;
 
         default:
-            sort.selectedIndex = 0;
             displayTask(tasks);
             break;
     }
