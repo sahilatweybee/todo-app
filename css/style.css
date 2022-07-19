@@ -7,7 +7,7 @@ body {
 
 .container-main {
   text-align: center;
-  width: 70%;
+  width: 80%;
   margin: auto;
 }
 
@@ -16,13 +16,13 @@ h1 {
 }
 
 input {
-  width: 70%;
+  width: 80%;
   padding: .4em;
   border-radius: .3em;
 }
 
 .task {
-  width: 70%;
+  width: 80%;
   margin: auto;
   display: flex;
   justify-content: space-between;
@@ -55,8 +55,8 @@ input {
 .other-btns {
   display: flex;
   margin: auto;
-  width: 70%;
-  justify-content: space-evenly;
+  width: 90%;
+  justify-content: center;
   padding: 1em;
 }
 
@@ -70,7 +70,7 @@ input {
 .other-btns .second {
   display: flex;
   justify-content: space-evenly;
-  width: 70%;
+  width: 80%;
 }
 
 .btn {
@@ -99,6 +99,7 @@ ul {
 }
 
 li {
+  display: block;
   font-size: 1em;
   text-align: center;
   padding: .3em .8em;
