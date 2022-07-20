@@ -37,15 +37,17 @@ const btnCompleted = document.querySelector('.completed');
 let tasks = [];
 let activeTasks = [];
 let completedTasks = [];
-let sortedTasks = [];
+let modifiedTasks = [];
 let editFlag = false;
+let sorted = false;
+let type;
 let currentId;
 let task = {
     id: -1,
     text: '',
     checked: false,
 };
-let sorted = false;
+
 
 //-----------------------------------------------------------Add------------------------//
 const addEntry = function () {
@@ -59,7 +61,7 @@ const addEntry = function () {
         text_Input.addEventListener('keydown', function (e) {
             if (e.key == 'Enter') {
                 if (text_Input.value) {
-                    task = { text: text_Input.value, id: task.id + 1, checked: task.checked };
+                    task = { text: text_Input.value, id: task.id + 1, checked: false };
                     // task.text = text_Input.value;
                     // task.id += 1;
                     tasks.push(task);
@@ -116,9 +118,9 @@ const checkTask = function (i) {
 const editTask = function (i) {
     editFlag = true;
     currentId = i;
-    if(sorted){
-        displayTask(sortedTasks);
-    }else{
+    if (sorted) {
+        displayTask(modifiedTasks);
+    } else {
         displayTask(tasks);
     }
 };
@@ -129,9 +131,9 @@ const editOnEnter = function (e) {
         tasks[index].text = document.querySelector('.edit-textbox').value;
         editFlag = false;
         currentId = 0;
-        if(sorted){
-            displayTask(sortedTasks);
-        }else{
+        if (sorted) {
+            sortTasks(type);
+        } else {
             displayTask(tasks);
         }
     }
@@ -139,25 +141,25 @@ const editOnEnter = function (e) {
 
 //---------------------------------------------------------deleteTask-------------------//
 const deleteTask = function (i) {
-    
-    if (sorted){
-        const index = sortedTasks.findIndex(el => el.id === i);
-        sortedTasks.splice(index, 1);
-        displayTask(sortedTasks);
-    }else{
+
+    if (sorted) {
+        const index = modifiedTasks.findIndex(el => el.id === i);
+        modifiedTasks.splice(index, 1);
+        displayTask(modifiedTasks);
+    } else {
         const index = tasks.findIndex(el => el.id === i);
         tasks.splice(index, 1);
         displayTask(tasks);
     }
-    
+
 };
 
 //------------------------------------------------------showActiveTasks-----------------//
 const showActiveTasks = function () {
-    if(sorted){
-        activeTasks = sortedTasks.filter(task => task.checked == false);
+    if (sorted) {
+        activeTasks = modifiedTasks.filter(task => task.checked == false);
         displayTask(activeTasks);
-    }else{
+    } else {
         activeTasks = tasks.filter(task => task.checked == false);
         displayTask(activeTasks);
     }
@@ -165,11 +167,11 @@ const showActiveTasks = function () {
 
 //---------------------------------------------------showCompletedTasks-----------------//
 const showCompletedTasks = function () {
-    if(sorted){
-        completedTasks = sortedTasks.filter(task => task.checked == true);
+    if (sorted) {
+        completedTasks = modifiedTasks.filter(task => task.checked === true);
         displayTask(completedTasks);
-    } else{
-        completedTasks = tasks.filter(task => task.checked == true);
+    } else {
+        completedTasks = tasks.filter(task => task.checked === true);
         displayTask(completedTasks);
     }
 };
@@ -214,91 +216,81 @@ btnCompleted.addEventListener('click', function () {
 });
 
 //------------------------------------------------------Sort-menu-----------------------//
-sort.addEventListener('click', function () {
-    let type = sort.options[sort.selectedIndex].value;
-    // console.log(type);
+const sortTasks = function (type) {
     switch (type) {
         case "A-Z":
             sorted = true;
-            sortedTasks = tasks.slice().sort((a, b) => {
-                if (a.text > b.text) {
-                    return -1;
-                } else if (a.text < b.text) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+            modifiedTasks = tasks.slice().sort((a, b) => {
+                return b.text.localeCompare(a.text, undefined, {
+                    numeric: true,
+                });
             });
-            displayTask(sortedTasks);
+            displayTask(modifiedTasks);
             break;
 
         case "Z-A":
             sorted = true;
-            sortedTasks = tasks.slice().sort((a, b) => {
+            modifiedTasks = tasks.slice().sort((a, b) => {
                 if (a.text < b.text) {
-                    return -1;
-                } else if (a.text > b.text) {
-                    return 1;
-                } else {
-                    return 0;
+                    return -1
+                }
+                else if (a.text > b.text) {
+                    return 1
+                }
+                else {
+                    return 0
+
                 }
             });
-            displayTask(sortedTasks);
+            displayTask(modifiedTasks);
             break;
 
         case "Newest":
             sorted = true;
-            sortedTasks = tasks.slice().sort((a, b) => {
-                if (a.id < b.id) {
-                    return -1;
-                } else if (a.id > b.id) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
-            displayTask(sortedTasks);
+            modifiedTasks = tasks.slice().sort((a, b) => a.id - b.id);
+            displayTask(modifiedTasks);
             break;
 
         case "Oldest":
             sorted = true;
-            sortedTasks = tasks.slice().sort((a, b) => {
-                if (a.id > b.id) {
-                    return -1;
-                } else if (a.id < b.id) {
-                    return 1;
-                } else {
-                    return 0;
-                }
-            });
-            displayTask(sortedTasks);
+            modifiedTasks = tasks.slice().sort((a, b) => b.id - a.id);
+            displayTask(modifiedTasks);
             break;
 
-        default : 
+        default:
             sorted = false;
             displayTask(tasks);
             break;
     }
+}
+
+sort.addEventListener('click', function () {
+    type = sort.options[sort.selectedIndex].value;
+    // console.log(type);
+    sortTasks(type);
 });
+
 
 //-----------------------------------------------------Actions-menu---------------------//
 actions.addEventListener('click', function () {
     let action = actions.options[actions.selectedIndex].value;
     // console.log(action);
-
-    switch (action){
+    switch (action) {
         case "Delete Selected":
-            tasks.forEach(tsk => {
-                if(tsk.checked == true){
+            actions.selectedIndex = 0;
+            tasks.forEach((tsk, _, tasks) => {
+                if (tsk.checked === true) {
                     tasks.splice(tasks.indexOf(tsk), 1);
+                    console.log(tasks);
                 }
             });
             displayTask(tasks);
             break;
 
         case "Select All":
-            tasks.forEach((tsk) =>{
-                if(!tsk.checked){
+            actions.selectedIndex = 0;
+            tasks.forEach((tsk) => {
+                if (!tsk.checked) {
                     tsk.checked = !tsk.checked;
                 }
             });
@@ -306,6 +298,7 @@ actions.addEventListener('click', function () {
             break;
 
         case "Unselect All":
+            actions.selectedIndex = 0;
             tasks.forEach((tsk) => {
                 if (tsk.checked) {
                     tsk.checked = !tsk.checked;
@@ -315,6 +308,7 @@ actions.addEventListener('click', function () {
             break;
 
         default:
+            actions.selectedIndex = 0;
             displayTask(tasks);
             break;
     }
