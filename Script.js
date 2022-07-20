@@ -40,38 +40,14 @@ let completedTasks = [];
 let modifiedTasks = [];
 let editFlag = false;
 let sorted = false;
+let active = false;
+let completed = false;
 let type;
 let currentId;
 let task = {
     id: -1,
     text: '',
     checked: false,
-};
-
-
-//-----------------------------------------------------------Add------------------------//
-const addEntry = function () {
-    text_Input.focus();
-    if (tasks.length) {
-        displayTask(tasks);
-    } else {
-        task_List.textContent = "No Data Found!";
-    }
-    if (text_Input) {
-        text_Input.addEventListener('keydown', function (e) {
-            if (e.key == 'Enter') {
-                if (text_Input.value) {
-                    task = { text: text_Input.value, id: task.id + 1, checked: false };
-                    // task.text = text_Input.value;
-                    // task.id += 1;
-                    tasks.push(task);
-                    displayTask(tasks);
-                    text_Input.value = '';
-                    // text_Input.blur();
-                }
-            }
-        });
-    }
 };
 
 //--------------------------------------------------------Display-----------------------//
@@ -95,6 +71,36 @@ const displayTask = function (tasks) {
     })
 };
 
+//-----------------------------------------------------------Add------------------------//
+const addEntry = function () {
+    text_Input.focus();
+    if (tasks.length) {
+        displayTask(tasks);
+    } else {
+        task_List.textContent = "No Data Found!";
+    }
+    if (text_Input) {
+        text_Input.addEventListener('keydown', function (e) {
+            if (e.key == 'Enter') {
+                if (text_Input.value) {
+                    task = { text: text_Input.value, id: task.id + 1, checked: false };
+                    // task.text = text_Input.value;
+                    // task.id += 1;
+                    tasks.push(task);
+                    if(sorted){
+                        sortTasks(type);
+                    }else{
+                        displayTask(tasks);
+                    }
+                    text_Input.value = '';
+                    // text_Input.blur();
+                }
+            }
+        });
+    }
+};
+
+
 //------------------------------------------------------------Search--------------------//
 const search = function () {
     text_Input.addEventListener('keyup', function () {
@@ -111,6 +117,19 @@ const search = function () {
 const checkTask = function (i) {
     let index = tasks.findIndex(el => el.id == i);
     tasks[index].checked = !tasks[index].checked;
+    completedTasks = showCompletedTasks();
+    activeTasks = showActiveTasks();
+    if(active){
+        displayTask(activeTasks);
+    } else if(completed){
+        displayTask(completedTasks);
+    } else {
+        if(sorted){
+            displayTask(modifiedTasks);
+        } else {
+            displayTask(tasks);
+        }
+    }
     // console.log(index);
 };
 
@@ -158,22 +177,20 @@ const deleteTask = function (i) {
 const showActiveTasks = function () {
     if (sorted) {
         activeTasks = modifiedTasks.filter(task => task.checked == false);
-        displayTask(activeTasks);
     } else {
         activeTasks = tasks.filter(task => task.checked == false);
-        displayTask(activeTasks);
     }
+    return activeTasks;
 };
 
 //---------------------------------------------------showCompletedTasks-----------------//
 const showCompletedTasks = function () {
     if (sorted) {
         completedTasks = modifiedTasks.filter(task => task.checked === true);
-        displayTask(completedTasks);
     } else {
         completedTasks = tasks.filter(task => task.checked === true);
-        displayTask(completedTasks);
     }
+    return completedTasks;
 };
 
 //-----------------------------------------------------eventListeners-------------------//
@@ -196,15 +213,23 @@ btnAll.addEventListener('click', function () {
     this.classList.add('active-li');
     btnActive.classList.remove('active-li');
     btnCompleted.classList.remove('active-li');
-
-    displayTask(tasks);
+    active = false;
+    completed = false;
+    if(sorted){
+        displayTask(modifiedTasks);
+    }else{
+        displayTask(tasks);
+    }
 });
 
 btnActive.addEventListener('click', function () {
     this.classList.add('active-li');
     btnAll.classList.remove('active-li');
     btnCompleted.classList.remove('active-li');
-    showActiveTasks();
+    active = true;
+    completed = false;
+    activeTasks = showActiveTasks();
+    displayTask(activeTasks);
 
 });
 
@@ -212,36 +237,58 @@ btnCompleted.addEventListener('click', function () {
     this.classList.add('active-li');
     btnActive.classList.remove('active-li');
     btnAll.classList.remove('active-li');
-    showCompletedTasks();
+    completed = true;
+    active = false;
+    completedTasks = showCompletedTasks();
+    displayTask(completedTasks);
 });
 
 //------------------------------------------------------Sort-menu-----------------------//
 const sortTasks = function (type) {
+    let numArr = [];
+    let strArr = [];
+    tasks.forEach(el => {
+        if(isNaN(el.text)){
+            strArr.push(el);
+        }else{
+            numArr.push(el);
+        }
+    });
     switch (type) {
         case "A-Z":
             sorted = true;
-            modifiedTasks = tasks.slice().sort((a, b) => {
-                return b.text.localeCompare(a.text, undefined, {
-                    numeric: true,
-                });
-            });
+            numArr.sort((a,b) => b.text-a.text);
+            strArr.sort((a,b) => {
+                if (a.text > b.text) {
+                    return -1;
+                }
+                else if (a.text < b.text) {
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            })
+            modifiedTasks = strArr.concat(numArr);
+                
             displayTask(modifiedTasks);
             break;
 
         case "Z-A":
             sorted = true;
-            modifiedTasks = tasks.slice().sort((a, b) => {
+            numArr.sort((a, b) => a.text - b.text);
+            strArr.sort((a, b) => {
                 if (a.text < b.text) {
-                    return -1
+                    return -1;
                 }
                 else if (a.text > b.text) {
-                    return 1
+                    return 1;
                 }
                 else {
-                    return 0
-
+                    return 0;
                 }
             });
+            modifiedTasks = numArr.concat(strArr);
             displayTask(modifiedTasks);
             break;
 
